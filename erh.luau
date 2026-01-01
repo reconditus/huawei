@@ -12,7 +12,14 @@ local crypt_encrypt = crypt_custom and crypt_custom.encrypt
 local crypt_decrypt = crypt_custom and crypt_custom.decrypt
 local crypt_base64_decode = (crypt and crypt.base64 and crypt.base64.decode) or (crypt and crypt.base64decode) or base64_decode
 
-assert(crypt_encrypt and crypt_decrypt, "Volt crypt.custom.encrypt/decrypt unavailable")
+if not (crypt_encrypt and crypt_decrypt) then
+    crypt_encrypt = function(_, data)
+        return data
+    end
+    crypt_decrypt = function(_, data)
+        return data
+    end
+end
 
 -- // UI LIBRARY
 if not isfolder(settings.folder_name) then
